@@ -3,7 +3,6 @@ import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
 
 console.log('Mapbox GL JS Loaded:', mapboxgl);
 
-/* ✅ YOUR ACCESS TOKEN */
 mapboxgl.accessToken = 'pk.eyJ1IjoidmFoZW5zc2EiLCJhIjoiY21wMXdjaDM1MDV0ZDJ4b2pnd3kzem9mMyJ9.lQk7pmlBduD85AvlVrznSw';
 
 const map = new mapboxgl.Map({
@@ -15,9 +14,6 @@ const map = new mapboxgl.Map({
   maxZoom: 18,
 });
 
-/* -----------------------------
-   HELPERS
-------------------------------*/
 
 let timeFilter = -1;
 
@@ -66,17 +62,11 @@ function getCoords(station) {
   return { cx: x, cy: y };
 }
 
-/* -----------------------------
-   MAP LOAD
-------------------------------*/
 
 map.on('load', async () => {
 
   const svg = d3.select('#map').append('svg');
 
-  /* -----------------------------
-     LOAD DATA
-  ------------------------------*/
 
   const jsonData = await d3.json(
     'https://dsc106.com/labs/lab07/data/bluebikes-stations.json'
@@ -93,17 +83,11 @@ map.on('load', async () => {
 
   let stations = computeStationTraffic(jsonData.data.stations, trips);
 
-  /* -----------------------------
-     SCALE
-  ------------------------------*/
 
   const radiusScale = d3.scaleSqrt()
     .domain([0, d3.max(stations, d => d.totalTraffic)])
     .range([0, 25]);
 
-  /* -----------------------------
-     CIRCLES + TOOLTIP (STEP 4.4)
-  ------------------------------*/
 
   const circles = svg
     .selectAll('circle')
@@ -123,9 +107,6 @@ map.on('load', async () => {
         .text(`${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`);
     });
 
-  /* -----------------------------
-     MAP UPDATE
-  ------------------------------*/
 
   function updatePositions() {
     circles
@@ -140,9 +121,6 @@ map.on('load', async () => {
 
   updatePositions();
 
-  /* -----------------------------
-     SLIDER (STEP 5)
-  ------------------------------*/
 
   const timeSlider = document.getElementById('time-slider');
   const selectedTime = document.getElementById('selected-time');
