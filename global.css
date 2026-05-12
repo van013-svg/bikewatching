@@ -34,18 +34,15 @@ header {
   align-items: baseline;
 }
 
-/* push label to the far right */
 label {
   margin-left: auto;
 }
 
-/* REQUIRED: prevent slider jumping when time updates */
 em,
 time {
   display: block;
 }
 
-/* make "(any time)" visually distinct */
 em {
   color: #888;
   font-style: italic;
@@ -58,7 +55,7 @@ input[type="range"] {
 .time-block {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* THIS pushes right */
+  align-items: flex-end; 
 }
 
 #map circle {
@@ -76,4 +73,42 @@ input[type="range"] {
   stroke: white;
   stroke-width: 1;
   opacity: 0.6;
+}
+
+:root {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  margin-block: 1em;
+}
+
+.legend-title {
+    color: color-mix(in oklch, black 35%, white 55%);
+}
+
+.legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.85rem;
+}
+
+.legend > div::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 50%;
+
+  background: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
 }
