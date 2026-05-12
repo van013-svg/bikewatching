@@ -23,7 +23,7 @@ function getCoords(station) {
 
 map.on('load', async () => {
 
-    const svg = d3.select('#map').select('svg');
+    const svg = d3.select("#map").append("svg")
 
     map.addSource('boston_route', {
         type: 'geojson',
@@ -122,17 +122,27 @@ map.on('load', async () => {
         .selectAll("circle")
         .data(stations)
         .enter()
-        .append("circle") 
+        .append("circle")
         .attr("r", d => radiusScale(d.totalTraffic))
         .attr("fill", "steelblue")
         .attr("stroke", "white")
         .attr("stroke-width", 1)
-        .attr("opacity", 0.8);
+        .attr("opacity", 0.6)
+        .attr("cx", d => getCoords(d).cx)
+        .attr("cy", d => getCoords(d).cy)
+        .each(function (d) {
+            // Add <title> for browser tooltips
+            d3.select(this)
+            .append('title')
+            .text(
+                `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`
+        );
+  });
 
     function updatePositions() {
-    circles
-        .attr("cx", d => getCoords(d).cx)
-        .attr("cy", d => getCoords(d).cy);
+        circles
+            .attr("cx", d => getCoords(d).cx)
+            .attr("cy", d => getCoords(d).cy);
     }
 
     updatePositions();
