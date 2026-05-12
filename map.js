@@ -113,12 +113,17 @@ map.on('load', async () => {
 
     console.log("Stations with traffic:", stations);
 
+    const radiusScale = d3
+        .scaleSqrt()
+        .domain([0, d3.max(stations, d => d.totalTraffic)])
+        .range([0, 25]);
+
     const circles = svg
         .selectAll("circle")
         .data(stations)
         .enter()
         .append("circle") 
-        .attr("r", 5)  
+        .attr("r", d => radiusScale(d.totalTraffic))
         .attr("fill", "steelblue")
         .attr("stroke", "white")
         .attr("stroke-width", 1)
