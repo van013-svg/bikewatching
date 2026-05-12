@@ -60,3 +60,20 @@ input[type="range"] {
   flex-direction: column;
   align-items: flex-end; /* THIS pushes right */
 }
+
+#map circle {
+  pointer-events: auto;
+
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+
+  fill: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+
+  stroke: white;
+  stroke-width: 1;
+  opacity: 0.6;
+}
