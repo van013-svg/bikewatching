@@ -115,16 +115,20 @@ map.on('load', async () => {
     .range([0, 0.5, 1]);
 
   const circles = svg
-    .selectAll('circle')
-    .data(stations, (d) => d.short_name)
-    .enter()
-    .append('circle')
-    .attr('fill', 'steelblue')
-    .attr('stroke', 'white')
-    .attr('opacity', 0.6)
-    .style('--departure-ratio', d =>
-        stationFlow(d.departures / d.totalTraffic || 0)
-    );
+  .selectAll('circle')
+  .data(stations, d => d.short_name)
+  .join('circle')
+  .attr('fill', 'steelblue')
+  .attr('stroke', 'white')
+  .attr('opacity', 0.6)
+  .style('--departure-ratio', d =>
+    stationFlow(d.departures / d.totalTraffic || 0)
+  )
+  .each(function (d) {
+    d3.select(this)
+      .append('title')
+      .text(`${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`);
+  });
 
   function updatePositions() {
     circles
