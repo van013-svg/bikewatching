@@ -27,3 +27,36 @@ body {
 #map svg circle {
   pointer-events: auto;
 }
+
+header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+}
+
+/* push label to the far right */
+label {
+  margin-left: auto;
+}
+
+/* REQUIRED: prevent slider jumping when time updates */
+em,
+time {
+  display: block;
+}
+
+/* make "(any time)" visually distinct */
+em {
+  color: #888;
+  font-style: italic;
+}
+
+input[type="range"] {
+  width: 300px;
+}
+
+.time-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* THIS pushes right */
+}
