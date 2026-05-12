@@ -15,7 +15,16 @@ const map = new mapboxgl.Map({
     maxZoom: 18, // Maximum allowed zoom
 });
 
+function getCoords(station) {
+  const point = new mapboxgl.LngLat(+station.lon, +station.lat);
+  const { x, y } = map.project(point);
+  return { cx: x, cy: y };
+}
+
 map.on('load', async () => {
+
+    const svg = d3.select('#map').select('svg');
+
     map.addSource('boston_route', {
         type: 'geojson',
         data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson',
@@ -65,4 +74,28 @@ map.on('load', async () => {
     
     let stations = jsonData.data.stations;
     console.log("Stations Array:", stations);
+
+    const circles = svg
+        .selectAll("circle")
+        .data(stations)
+        .enter()
+        .append("circle") 
+        .attr("r", 5)  
+        .attr("fill", "steelblue")
+        .attr("stroke", "white")
+        .attr("stroke-width", 1)
+        .attr("opacity", 0.8);
+
+    function updatePositions() {
+    circles
+        .attr("cx", d => getCoords(d).cx)
+        .attr("cy", d => getCoords(d).cy);
+    }
+
+    updatePositions();
+
+    map.on('move', updatePositions); // Update during map movement
+    map.on('zoom', updatePositions); // Update during zooming
+    map.on('resize', updatePositions); // Update on window resize
+    map.on('moveend', updatePositions); // Final adjustment after movement ends
 });
